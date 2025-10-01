@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Team Seva Report</title>
+  <link rel="stylesheet" href="style.css"> <!-- (Optional CSS file agar alag karna chaho) -->
+</head>
+<body>
+
+<header>
+  🌸 Team Seva Report System 🌸
+  <div class="datetime" id="datetime"></div>
+</header>
+
+<div class="container">
+
+  <!-- About Section -->
+  <section id="about">
+    <h2>About Me</h2>
+    <p>🌸 Satlok Ashram ek Adhyatmik Kendra Hai Jo 
+    <b>Jagatguru Tatvdarshi Sant Rampal Ji Maharaj</b> Ke Margdarshan Par Chal Raha Hai.</p>
+    <p>✨ Yahan Par Bhakton Ko Jeevan Ka Asli Arth Aur Moksha Ka Gyaan Diya Jata Hai.</p>
+    <p>👉 Official Website: 
+      <a href="https://www.jagatgururampalji.org/" target="_blank">www.jagatgururampalji.org</a>
+    </p>
+    <h3>📞 Contact : 7990505069</h3>
+  </section>
+
+  <!-- Form -->
+  <div class="card">
+    <h2>Fill Report</h2>
+    <form id="reportForm">
+      <label>Country</label>
+      <select id="country" onchange="populateStates()"><option value="">-- Select Country --</option></select>
+
+      <label>State</label>
+      <select id="state" onchange="populateDistricts()"><option value="">-- Select State --</option></select>
+
+      <label>District</label>
+      <select id="district" onchange="populateTahesils()"><option value="">-- Select District --</option></select>
+
+      <label>Tahesil</label>
+      <select id="tahesil" onchange="populateTeams()"><option value="">-- Select Tahesil --</option></select>
+
+      <label>Team</label>
+      <select id="team" onchange="populateMembers()"><option value="">-- Select Team --</option></select>
+
+      <label>Team Member</label>
+      <select id="teammember"><option value="">-- Select Team Member --</option></select>
+
+      <label>Remark</label>
+      <input type="text" id="remark" placeholder="Enter remark">
+
+      <h3>Aapki Team Me Kon Si Seva Huyee?</h3>
+      <div class="seva-section">
+        <label>1. 👍 Regular Satsang Seva</label><div id="regularSeva"></div>
+        <label>2. ✅ Social Media Seva</label><div id="socialSeva"></div>
+      </div>
+
+      <button type="button" class="btn btn-add" onclick="addToTable()">➕ Add to Table</button>
+      <button type="reset" class="btn btn-reset">♻ Reset Form</button>
+      <button type="button" class="btn btn-export" onclick="exportCSV()">⬇ Export CSV</button>
+    </form>
+  </div>
+
+  <!-- Report Table -->
+  <div class="card">
+    <h2>Report Table</h2>
+    <button type="button" class="btn btn-save" onclick="saveTableToSheet()">💾 Save Table to Google Sheet</button>
+    <table id="reportTable">
+      <thead>
+        <tr>
+          <th>Date & Time</th><th>Country</th><th>State</th><th>District</th><th>Tahesil</th>
+          <th>Team</th><th>Team Member</th><th>Remark</th><th>Regular Seva</th><th>Social Seva</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+</div>
+
+<footer>© 2025 Team Seva Reporting System | Developed for community seva tracking 🌼</footer>
+
+<!-- External JS file -->
+<script src="script.js"></script>
+</body>
+</html>
