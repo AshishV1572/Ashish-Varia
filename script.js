@@ -178,7 +178,7 @@ async function saveTableToSheet() {
     });
   });
   async function testSave() {
-  const res = await fetch = "https://script.google.com/macros/s/AKfycbxlt7pyrBs0ux360pwjiODynSJANmGmNUF46YtYKnr7TcSjcNGHmLnQ7vr579s_w3FEgQ/exec";
+  const res = await fetch = "https://script.google.com/macros/s/AKfycbxHB8I-bmvmCzhUdP-lYz8eC_9yz_5tcw_2ALrLXf7etNKAuem5RwdOdDS_6jwS70qcrg/exec";
   method: "POST",
     body: JSON.stringify([{datetime: "test", country: "India"}]),
     headers: {"Content-Type": "application/json"}
