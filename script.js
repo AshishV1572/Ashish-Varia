@@ -177,10 +177,14 @@ async function saveTableToSheet() {
       socialSeva: cells[9].innerText,
     });
   });
-
-  // ⚠️ Apna Google Apps Script URL yahan daalein 👇
-  const scriptURL = "https://script.google.com/macros/s/AKfycbxlt7pyrBs0ux360pwjiODynSJANmGmNUF46YtYKnr7TcSjcNGHmLnQ7vr579s_w3FEgQ/exec";
-
+  async function testSave() {
+  const res = await fetch = "https://script.google.com/macros/s/AKfycbxlt7pyrBs0ux360pwjiODynSJANmGmNUF46YtYKnr7TcSjcNGHmLnQ7vr579s_w3FEgQ/exec";
+  method: "POST",
+    body: JSON.stringify([{datetime: "test", country: "India"}]),
+    headers: {"Content-Type": "application/json"}
+  });
+  console.log(await res.text());
+}
   try {
     const res = await fetch(scriptURL, {
       method: "POST",
@@ -198,4 +202,5 @@ async function saveTableToSheet() {
     alert("🚫 Error: " + err.message);
   }
 }
+
 
