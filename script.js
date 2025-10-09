@@ -1,102 +1,157 @@
-<!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Team Seva Report</title>
-<style>
-body { font-family:"Segoe UI",sans-serif; background: linear-gradient(120deg,#fce4ec,#e0f7fa); margin:0; padding:0; color:#333; }
-header { background: linear-gradient(to right,#2196f3,#e91e63); color:#fff; padding:20px; text-align:center; font-size:20px; font-weight:bold; position:relative; }
-.datetime { position:absolute; top:12px; left:15px; font-size:15px; font-weight:bold; color:#fff; background: linear-gradient(135deg,#ff9800,#f44336); padding:6px 14px; border-radius:20px; box-shadow:0 3px 8px rgba(0,0,0,0.3); animation:glow 2s infinite alternate; }
-@keyframes glow { from { box-shadow:0 0 5px #ff9800,0 0 10px #f44336; } to { box-shadow:0 0 15px #ff5722,0 0 25px #e91e63; } }
-.container { max-width:1100px; margin:20px auto; padding:15px; }
-.card { background:#fff; border-radius:12px; padding:20px; margin-bottom:20px; box-shadow:0 4px 15px rgba(0,0,0,0.1); }
-h2,h3 { margin-top:0; background: linear-gradient(to right,#2196f3,#e91e63); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
-label { display:block; margin-top:12px; font-weight:600; }
-select,input[type="text"] { width:100%; padding:8px; margin:4px 0; border:1px solid #ccc; border-radius:6px; font-size:14px; }
-.btn { display:inline-block; margin-top:15px; padding:10px 18px; border:none; border-radius:8px; font-size:14px; cursor:pointer; transition:0.3s; }
-.btn-add{background:#4caf50;color:#fff;} .btn-reset{background:#f44336;color:#fff;} .btn-export{background:#2196f3;color:#fff;} .btn-save{background:#ff9800;color:#fff;} .btn:hover{opacity:0.9;}
-table{width:100%;border-collapse:collapse;margin-top:25px;}
-th,td{padding:8px;border:1px solid #ccc;text-align:left;font-size:13px;}
-th{background:#2196f3;color:#fff;}
-tr:nth-child(even){background:#fafafa;}
-.seva-section{margin-top:15px;padding:10px;border:1px dashed #bbb;border-radius:8px;background:#fafafa;}
-.seva-group{display:flex;gap:10px;margin:5px 0;}
-.seva-group select{flex:1;}
-footer{background:#222;color:#ccc;padding:15px;text-align:center;margin-top:30px;font-size:13px;}
-</style>
-</head>
-<body>
+// 🌸 TEAM SEVA REPORT SYSTEM SCRIPT 🌸
 
-<header>
-🌸 Team Seva Report System 🌸
-<div class="datetime" id="datetime"></div>
-</header>
+// Date-Time auto update
+function updateDateTime() {
+  const now = new Date();
+  document.getElementById("datetime").innerText =
+    now.toLocaleString("en-IN", { hour12: true });
+}
+setInterval(updateDateTime, 1000);
+updateDateTime();
 
-<div class="container">
+// 🔹 Dummy data for dropdowns (aap chahe to real data se replace kar sakte ho)
+const data = {
+  India: {
+    Haryana: {
+      Hisar: { Barwala: ["Team A", "Team B"] },
+      Rohtak: { Kalanaur: ["Team X", "Team Y"] },
+    },
+    Delhi: {
+      North: { ModelTown: ["Team 1", "Team 2"] },
+    },
+  },
+};
 
-<!-- About Section -->
-  <section id="about">
-    <h2>About Me</h2>
-    <p>🌸 Satlok Ashram ek Adhyatmik Kendra Hai Jo 
-    <b>Jagatguru Tatvdarshi Sant Rampal Ji Maharaj</b> Ke Margdarshan Par Chal Raha Hai.</p>
-    <p>✨ Yahan Par Bhakton Ko Jeevan Ka Asli Arth Aur Moksha Ka Gyaan Diya Jata Hai.</p>
-    <p>👉 Official Website: 
-      <a href="https://www.jagatgururampalji.org/" target="_blank">www.jagatgururampalji.org</a>
-    </p>
-    <h3>📞 Contact : 7990505069</h3>
-  </section>
+// 🔹 Populate dropdowns
+function populateCountries() {
+  const countrySelect = document.getElementById("country");
+  for (let country in data) {
+    countrySelect.innerHTML += `<option value="${country}">${country}</option>`;
+  }
+}
+populateCountries();
 
+function populateStates() {
+  const country = document.getElementById("country").value;
+  const stateSelect = document.getElementById("state");
+  stateSelect.innerHTML = "<option value=''>-- Select State --</option>";
+  if (country && data[country]) {
+    for (let state in data[country]) {
+      stateSelect.innerHTML += `<option value="${state}">${state}</option>`;
+    }
+  }
+}
 
-<!-- Form -->
-<div class="card">
-<h2>Fill Report</h2>
-<form id="reportForm">
-<label>Country</label>
-<select id="country" onchange="populateStates()"><option value="">-- Select Country --</option></select>
-<label>State</label>
-<select id="state" onchange="populateDistricts()"><option value="">-- Select State --</option></select>
-<label>District</label>
-<select id="district" onchange="populateTahesils()"><option value="">-- Select District --</option></select>
-<label>Tahesil</label>
-<select id="tahesil" onchange="populateTeams()"><option value="">-- Select Tahesil --</option></select>
-<label>Team</label>
-<select id="team" onchange="populateMembers()"><option value="">-- Select Team --</option></select>
-<label>Team Member</label>
-<select id="teammember"><option value="">-- Select Team Member --</option></select>
-<label>Remark</label>
-<input type="text" id="remark" placeholder="Enter remark">
+function populateDistricts() {
+  const country = document.getElementById("country").value;
+  const state = document.getElementById("state").value;
+  const districtSelect = document.getElementById("district");
+  districtSelect.innerHTML = "<option value=''>-- Select District --</option>";
+  if (country && state && data[country][state]) {
+    for (let dist in data[country][state]) {
+      districtSelect.innerHTML += `<option value="${dist}">${dist}</option>`;
+    }
+  }
+}
 
-<h3>Aapki Team Me Kon Si Seva Huyee?</h3>
-<div class="seva-section">
-<label>1. 👍 Regular Satsang Seva</label><div id="regularSeva"></div>
-<label>2. ✅ Social Media Seva</label><div id="socialSeva"></div>
-</div>
+function populateTahesils() {
+  const country = document.getElementById("country").value;
+  const state = document.getElementById("state").value;
+  const district = document.getElementById("district").value;
+  const tahesilSelect = document.getElementById("tahesil");
+  tahesilSelect.innerHTML = "<option value=''>-- Select Tahesil --</option>";
+  if (country && state && district && data[country][state][district]) {
+    for (let tahesil in data[country][state][district]) {
+      tahesilSelect.innerHTML += `<option value="${tahesil}">${tahesil}</option>`;
+    }
+  }
+}
 
-<button type="button" class="btn btn-add" onclick="addToTable()">➕ Add to Table</button>
-<button type="reset" class="btn btn-reset">♻ Reset Form</button>
-<button type="button" class="btn btn-export" onclick="exportCSV()">⬇ Export CSV</button>
-</form>
-</div>
+function populateTeams() {
+  const country = document.getElementById("country").value;
+  const state = document.getElementById("state").value;
+  const district = document.getElementById("district").value;
+  const tahesil = document.getElementById("tahesil").value;
+  const teamSelect = document.getElementById("team");
+  teamSelect.innerHTML = "<option value=''>-- Select Team --</option>";
+  if (country && state && district && tahesil) {
+    const teams = data[country][state][district][tahesil];
+    teams.forEach((team) => {
+      teamSelect.innerHTML += `<option value="${team}">${team}</option>`;
+    });
+  }
+}
 
-<!-- Report Table -->
-<div class="card">
-<h2>Report Table</h2>
-<button type="button" class="btn btn-save" onclick="saveTableToSheet()">💾 Save Table to Google Sheet</button>
-<table id="reportTable">
-<thead>
-<tr>
-<th>Date & Time</th><th>Country</th><th>State</th><th>District</th><th>Tahesil</th>
-<th>Team</th><th>Team Member</th><th>Remark</th><th>Regular Seva</th><th>Social Seva</th>
-</tr>
-</thead>
-<tbody></tbody>
-</table>
-</div>
+function populateMembers() {
+  const team = document.getElementById("team").value;
+  const memberSelect = document.getElementById("teammember");
+  memberSelect.innerHTML =
+    "<option value=''>-- Select Team Member --</option>";
+  if (team) {
+    // Aap yahan real data add kar sakte ho
+    const members = ["Member 1", "Member 2", "Member 3"];
+    members.forEach((m) => {
+      memberSelect.innerHTML += `<option value="${m}">${m}</option>`;
+    });
+  }
+}
 
-<footer>© 2025 Team Seva Reporting System | Developed for community seva tracking 🌼</footer>
+// 🔹 Add to Table
+function addToTable() {
+  const table = document.getElementById("reportTable").querySelector("tbody");
+  const datetime = new Date().toLocaleString("en-IN", { hour12: true });
+  const country = document.getElementById("country").value;
+  const state = document.getElementById("state").value;
+  const district = document.getElementById("district").value;
+  const tahesil = document.getElementById("tahesil").value;
+  const team = document.getElementById("team").value;
+  const teammember = document.getElementById("teammember").value;
+  const remark = document.getElementById("remark").value;
 
-<script>
+  const regularSeva = "Yes"; // Aap checkbox add kar sakte ho
+  const socialSeva = "Yes";
+
+  if (!country || !state || !district || !tahesil || !team) {
+    alert("⚠️ Please fill all fields before adding!");
+    return;
+  }
+
+  const newRow = `
+    <tr>
+      <td>${datetime}</td>
+      <td>${country}</td>
+      <td>${state}</td>
+      <td>${district}</td>
+      <td>${tahesil}</td>
+      <td>${team}</td>
+      <td>${teammember}</td>
+      <td>${remark}</td>
+      <td>${regularSeva}</td>
+      <td>${socialSeva}</td>
+    </tr>
+  `;
+  table.innerHTML += newRow;
+  alert("✅ Added to table!");
+}
+
+// 🔹 Export CSV
+function exportCSV() {
+  const rows = document.querySelectorAll("#reportTable tr");
+  let csv = [];
+  rows.forEach((row) => {
+    const cols = row.querySelectorAll("th, td");
+    let rowData = [];
+    cols.forEach((col) => rowData.push(col.innerText));
+    csv.push(rowData.join(","));
+  });
+  const blob = new Blob([csv.join("\n")], { type: "text/csv" });
+  const link = document.createElement("a");
+  link.href = URL.createObjectURL(blob);
+  link.download = "Team_Seva_Report.csv";
+  link.click();
+}
+
+// 🔹 Save to Google Sheet
 async function saveTableToSheet() {
   const table = document.getElementById("reportTable").querySelector("tbody");
   const rows = table.querySelectorAll("tr");
@@ -106,9 +161,8 @@ async function saveTableToSheet() {
     return;
   }
 
-  // Table ke rows ko JSON me badalna
   let data = [];
-  rows.forEach(row => {
+  rows.forEach((row) => {
     const cells = row.querySelectorAll("td");
     data.push({
       datetime: cells[0].innerText,
@@ -120,12 +174,12 @@ async function saveTableToSheet() {
       teammember: cells[6].innerText,
       remark: cells[7].innerText,
       regularSeva: cells[8].innerText,
-      socialSeva: cells[9].innerText
+      socialSeva: cells[9].innerText,
     });
   });
 
-  // 👇 Apna Apps Script URL yahan paste karo
-  const scriptURL = "https://script.google.com/macros/s/AKfycbxlt7pyrBs0ux360pwjiODynSJANmGmNUF46YtYKnr7TcSjcNGHmLnQ7vr579s_w3FEgQ/exec";
+  // ⚠️ Apna Google Apps Script URL yahan daalein 👇
+  const scriptURL = "https://script.google.com/macros/s/AKfycbx123abcXYZ/exec";
 
   try {
     const res = await fetch(scriptURL, {
@@ -136,237 +190,11 @@ async function saveTableToSheet() {
 
     if (res.ok) {
       alert("✅ Data saved to Google Sheet successfully!");
+      table.innerHTML = ""; // clear table
     } else {
-      alert("⚠️ Failed to save data. Check script URL or permissions.");
+      alert("⚠️ Failed to save data. Check your script URL or permissions.");
     }
   } catch (err) {
     alert("🚫 Error: " + err.message);
   }
 }
-
-// Sample Data
-const data = { 
-   India: {
-        Gujarat: {
-          PanchMahals: {
-            Kalol: {
-              Bhavanadasi: [
-                "Kamaladasi", "Kailashdasi", "Kishnadasi", "Payaldasi", "Tanvidas",
-                "Savitadasi(Kalol)", "Sushiladasi(Kalol)", "Jinaldaasi(Kalol)",
-                "Pujadasi", "Pinnacle Dasi Halol", "Sheetaldasi Ghoghamba",
-                "Sudhadasi Kalol", "Varshadasi Halol"
-              ],
-              Krishnadasi: [
-                "Jyotidasi(Ghoghamba)", "Rajnidasi(Halol)", "Kasidasi",
-                "Bhavanadasi(Kalol)", "Gitadasi", "Jinaldasi(Halol)",
-                "Minadasi(Kalyana)", "Minadasi(Godhra)", "Urmiladasi",
-                "Aashadasi", "Kailashdasi Godhra", "Sadhanadasi Halol",
-                "Mayadasi Kalol", "Kishanadasi Godhra"
-               ],
-               Nayandas: [
-                "Shantilaldas", "MahipalDas", "DharmeshDas", "Jhondas"
-               ],
-               Dharmeshdas: [
-                "Ashishdas", "ManojDas", "NayanDas", "Arvind Das"
-              ]
-            },
-            Godhra: {
-              Babudas: [
-                "Jitendra Das", "Ashok Das", "Janadas", "Manoj Das", "Mukeshdas",
-                "Mukundandas", "Doltadas", "Tejasdas", "Narendradas", "Babudas",
-                "Bharatdas", "Jagadishdas", "Prakashdas", "Shankardas",
-                "Satishdas", "Rakeshdas"
-              ]
-            },    
-             Halol: {
-               Deepakdas: [
-                "Kanudas", "Bhagwandas", "Arjundas", "Jaydas", "Rajudas"
-               ],
-               Jaydas: [
-                "Maheshdas", "Sahdevdas", "Jagadishdas", "Deepak Das", 
-               ]
-            },    
-             MorvaHadaf: {
-               Nileshdas: [
-                "Balwantdas", "Chandudas", "fatehsinghdas", "Sahdevdas", "Dharmeshdas", "Rameshdas"
-                ],
-             Balvantdas: [
-                "Nileshdas", "Kanudas", "Vinudas", "Babudas", "Kadudas", "Purushottamdas"
-                ]
-             }, 
-              Ghoghamba: {
-                Bharatdas: [
-                "Ishwardas", "AshokDas", "Arvinddas", "Girishdas", "Sanjaydas", "Bharatdas"
-              ]
-            },  
-              Shahera: {
-               Nileshdas: [
-              "Hasmukhdas", "Pruthvidas", "BhalasihDas", "RameshDas", "ShankarDas", "Natudas", "Mithadas", "MangaDas",
-              "Rajesh Das", "Pankajdas", "Nileshdas", "Laldas"
-              ],
-               Hsamukhdas : [
-              "chandudas", "AlpeshDas", "MotiDas", "Rajudas", "Artadas", "Arvatadas", "Arvind Das", "Kirandas",
-              "Tinadas", "Bhalladas", "Fuladas"
-               ]
-             }, 
-          Jambughoda: {},
-          },
-          Ahmedabad: {}, Amreli: {}, Anand: {}, Aravalli: {}, Banaskantha: {}, Bharuch: {},
-          Bhavnagar: {}, Botad: {}, Chhotaudepur: {}, Dahod: {}, Dangs: {}, Devbhumi_Dwarka: {},
-          Gandhinagar: {}, Gir_Somnath: {}, Jamnagar: {}, Junagadh: {}, Kachchh: {}, Kheda: {},
-          Mahesana: {}, Mahisagar: {}, Morbi: {}, Narmada: {}, Navsari: {}, Patan: {},
-          Porbandar: {}, Rajkot: {}, Sabarkantha: {}, Surat: {}, Surendranagar: {},
-          Tapi: {}, Vadodara: {}, Valsad: {}
-        },
-        Maharashtra: {}
-      }
-    };
-  window.onload=()=>{
-  Object.keys(data).forEach(c=>document.getElementById("country").add(new Option(c,c)));
-  createDropdowns("regularSeva",["👍Done","❌Not Done"],3);
-  createDropdowns("socialSeva",["✅Done","❌Not Done"],3);
-  updateDateTime();
-  setInterval(updateDateTime,1000);
-};
-
-// Live Date & Time
-function updateDateTime(){ 
-  const now=new Date(); 
-  document.getElementById("datetime").textContent=now.toLocaleDateString("en-GB")+" | "+now.toLocaleTimeString(); 
-}
-
-// Create seva dropdowns
-function createDropdowns(containerId,options,count){
-  const container=document.getElementById(containerId); 
-  container.innerHTML="";
-  for(let i=0;i<count;i++){
-    const div=document.createElement("div"); 
-    div.className="seva-group";
-    const select=document.createElement("select"); 
-    select.innerHTML="<option value=''>-- Select --</option>";
-    options.forEach(opt=>select.add(new Option(opt,opt)));
-    div.appendChild(select); 
-    container.appendChild(div);
-  }
-}
-
-// Location Dropdowns
-function populateStates(){ 
-  const c=document.getElementById("country").value; 
-  resetSelects(["state","district","tahesil","team","teammember"]); 
-  if(!c)return; 
-  Object.keys(data[c]).forEach(s=>document.getElementById("state").add(new Option(s,s))); 
-}
-function populateDistricts(){ 
-  const c=document.getElementById("country").value; 
-  const s=document.getElementById("state").value; 
-  resetSelects(["district","tahesil","team","teammember"]); 
-  if(!s)return; 
-  Object.keys(data[c][s]).forEach(d=>document.getElementById("district").add(new Option(d,d))); 
-}
-function populateTahesils(){ 
-  const c=document.getElementById("country").value; 
-  const s=document.getElementById("state").value; 
-  const d=document.getElementById("district").value; 
-  resetSelects(["tahesil","team","teammember"]); 
-  if(!d)return; 
-  Object.keys(data[c][s][d]).forEach(th=>document.getElementById("tahesil").add(new Option(th,th))); 
-}
-function populateTeams(){ 
-  const c=document.getElementById("country").value; 
-  const s=document.getElementById("state").value; 
-  const d=document.getElementById("district").value; 
-  const th=document.getElementById("tahesil").value; 
-  resetSelects(["team","teammember"]); 
-  if(!th)return; 
-  Object.keys(data[c][s][d][th]).forEach(team=>document.getElementById("team").add(new Option(team,team))); 
-}
-function populateMembers(){ 
-  const c=document.getElementById("country").value; 
-  const s=document.getElementById("state").value; 
-  const d=document.getElementById("district").value; 
-  const th=document.getElementById("tahesil").value; 
-  const team=document.getElementById("team").value; 
-  resetSelects(["teammember"]); 
-  if(!team)return; 
-  data[c][s][d][th][team].forEach(m=>document.getElementById("teammember").add(new Option(m,m))); 
-}
-function resetSelects(ids){ ids.forEach(id=>document.getElementById(id).innerHTML=`<option value="">-- Select ${id} --</option>`); }
-
-// Add to Table
-function addToTable(){
-  const c=document.getElementById("country").value; 
-  const s=document.getElementById("state").value; 
-  const d=document.getElementById("district").value; 
-  const th=document.getElementById("tahesil").value; 
-  const team=document.getElementById("team").value; 
-  const m=document.getElementById("teammember").value; 
-  const remark=document.getElementById("remark").value;
-  const now=new Date(); 
-  const datetime=now.toLocaleDateString("en-GB")+" "+now.toLocaleTimeString();
-
-  if(!c||!s||!d||!th||!team||!m){ alert("Please fill all dropdowns!"); return; }
-
-  const regular=[...document.querySelectorAll("#regularSeva select")].map(sel=>sel.value).filter(v=>v).join(" | ");
-  const social=[...document.querySelectorAll("#socialSeva select")].map(sel=>sel.value).filter(v=>v).join(" | ");
-
-  const row=document.getElementById("reportTable").querySelector("tbody").insertRow();
-  [datetime,c,s,d,th,team,m,remark,regular,social].forEach(val=>row.insertCell().textContent=val);
-
-  // Save to Google Sheet
-  saveToGoogleSheet(datetime,c,s,d,th,team,m,remark,regular,social);
-
-  document.getElementById("reportForm").reset();
-  createDropdowns("regularSeva",["👍","❌"],3);
-  createDropdowns("socialSeva",["✅","❌"],3);
-}
-
-// Save individual row to Google Sheet
-function saveToGoogleSheet(datetime,c,s,d,th,team,m,remark,regular,social) {
-  fetch(scriptURL, {
-    method: 'POST',
-    body: JSON.stringify({
-      datetime: datetime,
-      country: c,
-      state: s,
-      district: d,
-      tahesil: th,
-      team: team,
-      teammember: m,
-      remark: remark,
-      regular: regular,
-      social: social
-    })
-  })
-  .then(res => res.text())
-  .then(msg => console.log("Saved:", msg))
-  .catch(err => console.error("Error:", err));
-}
-
-// Export CSV
-function exportCSV(){
-  let table=document.getElementById("reportTable");
-  let rows=[...table.rows].map(r=>[...r.cells].map(c=>c.textContent));
-  let csv=rows.map(r=>r.join(",")).join("\n");
-  let blob=new Blob([csv],{type:"text/csv"});
-  let a=document.createElement("a");
-  a.href=URL.createObjectURL(blob);
-  a.download="TeamSevaReport.csv";
-  a.click();
-}
-
-// Save whole table to Sheet (optional bulk save)
-function saveTableToSheet(){
-  let rows=[...document.querySelectorAll("#reportTable tbody tr")];
-  rows.forEach(r=>{
-    let vals=[...r.cells].map(c=>c.textContent);
-    saveToGoogleSheet(...vals);
-  });
-  alert("Table data sent to Google Sheet!");
-}
-</script>
-
-</body>
-</html>
-
-
