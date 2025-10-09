@@ -179,7 +179,7 @@ async function saveTableToSheet() {
   });
 
   // ⚠️ Apna Google Apps Script URL yahan daalein 👇
-  const scriptURL = "https://script.google.com/macros/s/AKfycbx123abcXYZ/exec";
+  const scriptURL = "https://script.google.com/macros/s/AKfycbxlt7pyrBs0ux360pwjiODynSJANmGmNUF46YtYKnr7TcSjcNGHmLnQ7vr579s_w3FEgQ/exec";
 
   try {
     const res = await fetch(scriptURL, {
@@ -198,3 +198,4 @@ async function saveTableToSheet() {
     alert("🚫 Error: " + err.message);
   }
 }
+
