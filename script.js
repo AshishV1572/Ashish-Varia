@@ -97,7 +97,52 @@ footer{background:#222;color:#ccc;padding:15px;text-align:center;margin-top:30px
 <footer>© 2025 Team Seva Reporting System | Developed for community seva tracking 🌼</footer>
 
 <script>
-const scriptURL = "https://script.google.com/macros/s/AKfycbxlt7pyrBs0ux360pwjiODynSJANmGmNUF46YtYKnr7TcSjcNGHmLnQ7vr579s_w3FEgQ/exec"; // Replace with Apps Script URL
+async function saveTableToSheet() {
+  const table = document.getElementById("reportTable").querySelector("tbody");
+  const rows = table.querySelectorAll("tr");
+
+  if (rows.length === 0) {
+    alert("❌ No data to save!");
+    return;
+  }
+
+  // Table ke rows ko JSON me badalna
+  let data = [];
+  rows.forEach(row => {
+    const cells = row.querySelectorAll("td");
+    data.push({
+      datetime: cells[0].innerText,
+      country: cells[1].innerText,
+      state: cells[2].innerText,
+      district: cells[3].innerText,
+      tahesil: cells[4].innerText,
+      team: cells[5].innerText,
+      teammember: cells[6].innerText,
+      remark: cells[7].innerText,
+      regularSeva: cells[8].innerText,
+      socialSeva: cells[9].innerText
+    });
+  });
+
+  // 👇 Apna Apps Script URL yahan paste karo
+  const scriptURL = "https://script.google.com/macros/s/AKfycbxlt7pyrBs0ux360pwjiODynSJANmGmNUF46YtYKnr7TcSjcNGHmLnQ7vr579s_w3FEgQ/exec";
+
+  try {
+    const res = await fetch(scriptURL, {
+      method: "POST",
+      body: JSON.stringify(data),
+      headers: { "Content-Type": "application/json" },
+    });
+
+    if (res.ok) {
+      alert("✅ Data saved to Google Sheet successfully!");
+    } else {
+      alert("⚠️ Failed to save data. Check script URL or permissions.");
+    }
+  } catch (err) {
+    alert("🚫 Error: " + err.message);
+  }
+}
 
 // Sample Data
 const data = { 
@@ -323,4 +368,5 @@ function saveTableToSheet(){
 
 </body>
 </html>
+
 
