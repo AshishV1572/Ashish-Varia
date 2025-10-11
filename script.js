@@ -1,6 +1,6 @@
-// 👇👇 Replace this with your actual Google Apps Script Web App URL
-const scriptURL = "YOUR_GOOGLE_SCRIPT_URL_HERE";
+const scriptURL = "PASTE_YOUR_GOOGLE_SCRIPT_URL_HERE"; // 👈 Replace this
 
+// ---------- On Load ----------
 window.onload = () => {
   Object.keys(data).forEach(c => document.getElementById("country").add(new Option(c, c)));
   createDropdowns("regularSeva", ["👍Done", "❌Not Done"], 3);
@@ -9,14 +9,26 @@ window.onload = () => {
   setInterval(updateDateTime, 1000);
 };
 
-// Live Date & Time
+// ---------- Date & Time ----------
 function updateDateTime() {
   const now = new Date();
-  document.getElementById("datetime").textContent =
-    now.toLocaleDateString("en-GB") + " | " + now.toLocaleTimeString();
+  document.getElementById("datetime").textContent = now.toLocaleDateString("en-GB") + " | " + now.toLocaleTimeString();
 }
 
-// Create seva dropdowns
+// ---------- Dropdown Data ----------
+const data = {
+  India: {
+    Gujarat: {
+      PanchMahals: {
+        Kalol: {
+          Bhavanadasi: ["Kamaladasi", "Kailashdasi", "Kishnadasi", "Payaldasi"],
+        },
+      },
+    },
+  },
+};
+
+// ---------- Helper Functions ----------
 function createDropdowns(containerId, options, count) {
   const container = document.getElementById(containerId);
   container.innerHTML = "";
@@ -31,21 +43,10 @@ function createDropdowns(containerId, options, count) {
   }
 }
 
-// 🗺️ Sample Data
-const data = {
-  India: {
-    Gujarat: {
-      PanchMahals: {
-        Kalol: { Bhavanadasi: ["Kamaladasi", "Kailashdasi"], Krishnadasi: ["Jyotidasi", "Rajnidasi"] },
-        Godhra: { Babudas: ["Jitendra Das", "Ashok Das"] },
-        Halol: { Deepakdas: ["Kanudas", "Bhagwandas"] },
-      },
-    },
-    Maharashtra: {},
-  },
-};
+function resetSelects(ids) {
+  ids.forEach(id => (document.getElementById(id).innerHTML = `<option value="">-- Select ${id} --</option>`));
+}
 
-// Dropdown population functions
 function populateStates() {
   const c = document.getElementById("country").value;
   resetSelects(["state", "district", "tahesil", "team", "teammember"]);
@@ -86,11 +87,8 @@ function populateMembers() {
   if (!team) return;
   data[c][s][d][th][team].forEach(m => document.getElementById("teammember").add(new Option(m, m)));
 }
-function resetSelects(ids) {
-  ids.forEach(id => document.getElementById(id).innerHTML = `<option value="">-- Select ${id} --</option>`);
-}
 
-// 🧾 Add Row
+// ---------- Table Functions ----------
 function addToTable() {
   const c = document.getElementById("country").value;
   const s = document.getElementById("state").value;
@@ -107,65 +105,49 @@ function addToTable() {
     return;
   }
 
-  const regular = [...document.querySelectorAll("#regularSeva select")]
-    .map(sel => sel.value)
-    .filter(v => v)
-    .join(" | ");
-  const social = [...document.querySelectorAll("#socialSeva select")]
-    .map(sel => sel.value)
-    .filter(v => v)
-    .join(" | ");
+  const regular = [...document.querySelectorAll("#regularSeva select")].map(sel => sel.value).filter(v => v).join(" | ");
+  const social = [...document.querySelectorAll("#socialSeva select")].map(sel => sel.value).filter(v => v).join(" | ");
 
   const row = document.getElementById("reportTable").querySelector("tbody").insertRow();
   [datetime, c, s, d, th, team, m, remark, regular, social].forEach(val => row.insertCell().textContent = val);
 
   saveToGoogleSheet(datetime, c, s, d, th, team, m, remark, regular, social);
+
   document.getElementById("reportForm").reset();
-  createDropdowns("regularSeva", ["👍", "❌"], 3);
-  createDropdowns("socialSeva", ["✅", "❌"], 3);
+  createDropdowns("regularSeva", ["👍Done", "❌Not Done"], 3);
+  createDropdowns("socialSeva", ["✅Done", "❌Not Done"], 3);
 }
 
-// ☁️ Save data to Google Sheet
 function saveToGoogleSheet(datetime, c, s, d, th, team, m, remark, regular, social) {
   fetch(scriptURL, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
+    method: 'POST',
     body: JSON.stringify({
-      datetime,
-      country: c,
-      state: s,
-      district: d,
-      tahesil: th,
-      team,
-      teammember: m,
-      remark,
-      regular,
-      social,
-    }),
+      datetime, country: c, state: s, district: d,
+      tahesil: th, team, teammember: m,
+      remark, regular, social
+    })
   })
-    .then(res => res.text())
-    .then(msg => console.log("Saved:", msg))
-    .catch(err => console.error("Error:", err));
+  .then(res => res.text())
+  .then(msg => console.log("✅ Saved:", msg))
+  .catch(err => console.error("❌ Error:", err));
 }
 
-// 📤 Export Table as CSV
 function exportCSV() {
-  let table = document.getElementById("reportTable");
-  let rows = [...table.rows].map(r => [...r.cells].map(c => c.textContent));
-  let csv = rows.map(r => r.join(",")).join("\n");
-  let blob = new Blob([csv], { type: "text/csv" });
-  let a = document.createElement("a");
+  const table = document.getElementById("reportTable");
+  const rows = [...table.rows].map(r => [...r.cells].map(c => c.textContent));
+  const csv = rows.map(r => r.join(",")).join("\n");
+  const blob = new Blob([csv], { type: "text/csv" });
+  const a = document.createElement("a");
   a.href = URL.createObjectURL(blob);
   a.download = "TeamSevaReport.csv";
   a.click();
 }
 
-// 💾 Save Whole Table to Google Sheet
 function saveTableToSheet() {
-  let rows = [...document.querySelectorAll("#reportTable tbody tr")];
+  const rows = [...document.querySelectorAll("#reportTable tbody tr")];
   rows.forEach(r => {
-    let vals = [...r.cells].map(c => c.textContent);
+    const vals = [...r.cells].map(c => c.textContent);
     saveToGoogleSheet(...vals);
   });
-  alert("🌸 Table data sent to Google Sheet!");
+  alert("✅ Table data sent to Google Sheet!");
 }
