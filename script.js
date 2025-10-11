@@ -1,5 +1,4 @@
-const scriptURL = "PASTE_YOUR_GOOGLE_SCRIPT_URL_HERE"; // 👈 Replace this
-
+const scriptURL = "https://script.google.com/macros/s/AKfycbzMFgU-HDz3lCdt7cRlxuAE7nZDiJHvt8ET67IT6XlbQ4Ix-V0aMhNKBg80S2U9Gxfn4Q/exec";
 // ---------- On Load ----------
 window.onload = () => {
   Object.keys(data).forEach(c => document.getElementById("country").add(new Option(c, c)));
@@ -151,3 +150,4 @@ function saveTableToSheet() {
   });
   alert("✅ Table data sent to Google Sheet!");
 }
+
