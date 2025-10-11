@@ -178,7 +178,7 @@ async function saveTableToSheet() {
     });
   });
   async function testSave() {
-  const res = await fetch = "https://script.google.com/macros/s/AKfycbw0ZfiNq_reuuYqK2E1AWeHBc0yhh_oV3dS98OhTw4YNsd8_43qse5b4e6ku68ZjPwp/exec";
+  const res = await fetch = "https://script.google.com/macros/s/AKfycbxuK6_g4J8NVXFiRcleu6U6wBcVL8Z2iyIbjOh8WenwowB8FMtZcfIgtmFSO82dH2vS0Q/exec";
   method: "POST",
     body: JSON.stringify([{datetime: "test", country: "India"}]),
     headers: {"Content-Type": "application/json"}
@@ -202,6 +202,7 @@ async function saveTableToSheet() {
     alert("🚫 Error: " + err.message);
   }
 }
+
 
 
 
