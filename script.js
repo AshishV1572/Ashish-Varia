@@ -17,10 +17,10 @@ function updateDateTime() {
 // ---------- Dropdown Data ----------
 const data = {
   India: {
-    Gujarat: {
-      PanchMahals: {
-        Kalol: {
-           Bhavanadasi: [
+        Gujarat: {
+          PanchMahals: {
+            Kalol: {
+              Bhavanadasi: [
                 "Kamaladasi", "Kailashdasi", "Kishnadasi", "Payaldasi", "Tanvidas",
                 "Savitadasi(Kalol)", "Sushiladasi(Kalol)", "Jinaldaasi(Kalol)",
                 "Pujadasi", "Pinnacle Dasi Halol", "Sheetaldasi Ghoghamba",
@@ -89,8 +89,8 @@ const data = {
           Tapi: {}, Vadodara: {}, Valsad: {}
         },
         Maharashtra: {}
-     },
-   };
+      }
+    };
 
 // ---------- Helper Functions ----------
 function createDropdowns(containerId, options, count) {
@@ -215,6 +215,7 @@ function saveTableToSheet() {
   });
   alert("✅ Table data sent to Google Sheet!");
 }
+
 
 
 
