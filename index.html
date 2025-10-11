@@ -52,7 +52,11 @@ footer{background:#222;color:#ccc;padding:15px;text-align:center;margin-top:30px
 <!-- Form -->
 <div class="card">
 <h2>Fill Report</h2>
-<form id="reportForm">
+
+<form id="reportForm" onsubmit="submitDirect(event)">
+<label>Select Date</label>
+<input type="date" id="reportDate">
+
   <label>Country</label>
   <select id="country" onchange="populateStates()"><option value="">-- Select Country --</option></select>
 
@@ -106,4 +110,5 @@ footer{background:#222;color:#ccc;padding:15px;text-align:center;margin-top:30px
 <script src="script.js"></script>
 </body>
 </html>
+
 
