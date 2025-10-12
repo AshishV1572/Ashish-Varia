@@ -14,6 +14,9 @@ function updateDateTime() {
   const now = new Date();
   document.getElementById("datetime").textContent =
     now.toLocaleDateString("en-GB") + " | " + now.toLocaleTimeString();
+  const selectedDate = document.getElementById("date").value || new Date().toLocaleDateString("en-GB");
+  const currentTime = new Date().toLocaleTimeString();
+  saveToGoogleSheet(selectedDate, currentTime, c, s, d, th, team, m, remark, regular, social);
 }
 
 // ---------- Dropdown Data ----------
@@ -124,5 +127,6 @@ function submitDirect(event) {
     })
     .catch(err => console.error("❌ Error:", err));
 }
+
 
 
