@@ -1,4 +1,5 @@
 const scriptURL = "https://script.google.com/macros/s/AKfycby9zKNBHcTODayOKPaa6apGYgvnuCH5IGNYALvk6b9xblenDQ-SQKJDDyOHEDRA_6KgoQ/exec";
+
 // ---------- On Load ----------
 window.onload = () => {
   Object.keys(data).forEach(c => document.getElementById("country").add(new Option(c, c)));
@@ -11,86 +12,26 @@ window.onload = () => {
 // ---------- Date & Time ----------
 function updateDateTime() {
   const now = new Date();
-  document.getElementById("datetime").textContent = now.toLocaleDateString("en-GB") + " | " + now.toLocaleTimeString();
+  document.getElementById("datetime").textContent =
+    now.toLocaleDateString("en-GB") + " | " + now.toLocaleTimeString();
 }
 
 // ---------- Dropdown Data ----------
 const data = {
   India: {
-        Gujarat: {
-          PanchMahals: {
-            Kalol: {
-              Bhavanadasi: [
-                "Kamaladasi", "Kailashdasi", "Kishnadasi", "Payaldasi", "Tanvidas",
-                "Savitadasi(Kalol)", "Sushiladasi(Kalol)", "Jinaldaasi(Kalol)",
-                "Pujadasi", "Pinnacle Dasi Halol", "Sheetaldasi Ghoghamba",
-                "Sudhadasi Kalol", "Varshadasi Halol"
-              ],
-              Krishnadasi: [
-                "Jyotidasi(Ghoghamba)", "Rajnidasi(Halol)", "Kasidasi",
-                "Bhavanadasi(Kalol)", "Gitadasi", "Jinaldasi(Halol)",
-                "Minadasi(Kalyana)", "Minadasi(Godhra)", "Urmiladasi",
-                "Aashadasi", "Kailashdasi Godhra", "Sadhanadasi Halol",
-                "Mayadasi Kalol", "Kishanadasi Godhra"
-               ],
-               Nayandas: [
-                "Shantilaldas", "MahipalDas", "DharmeshDas", "Jhondas"
-               ],
-               Dharmeshdas: [
-                "Ashishdas", "ManojDas", "NayanDas", "Arvind Das"
-              ]
-            },
-            Godhra: {
-              Babudas: [
-                "Jitendra Das", "Ashok Das", "Janadas", "Manoj Das", "Mukeshdas",
-                "Mukundandas", "Doltadas", "Tejasdas", "Narendradas", "Babudas",
-                "Bharatdas", "Jagadishdas", "Prakashdas", "Shankardas",
-                "Satishdas", "Rakeshdas"
-              ]
-            },    
-             Halol: {
-               Deepakdas: [
-                "Kanudas", "Bhagwandas", "Arjundas", "Jaydas", "Rajudas"
-               ],
-               Jaydas: [
-                "Maheshdas", "Sahdevdas", "Jagadishdas", "Deepak Das", 
-               ]
-            },    
-             MorvaHadaf: {
-               Nileshdas: [
-                "Balwantdas", "Chandudas", "fatehsinghdas", "Sahdevdas", "Dharmeshdas", "Rameshdas"
-                ],
-             Balvantdas: [
-                "Nileshdas", "Kanudas", "Vinudas", "Babudas", "Kadudas", "Purushottamdas"
-                ]
-             }, 
-              Ghoghamba: {
-                Bharatdas: [
-                "Ishwardas", "AshokDas", "Arvinddas", "Girishdas", "Sanjaydas", "Bharatdas"
-              ]
-            },  
-              Shahera: {
-               Nileshdas: [
-              "Hasmukhdas", "Pruthvidas", "BhalasihDas", "RameshDas", "ShankarDas", "Natudas", "Mithadas", "MangaDas",
-              "Rajesh Das", "Pankajdas", "Nileshdas", "Laldas"
-              ],
-               Hsamukhdas : [
-              "chandudas", "AlpeshDas", "MotiDas", "Rajudas", "Artadas", "Arvatadas", "Arvind Das", "Kirandas",
-              "Tinadas", "Bhalladas", "Fuladas"
-               ]
-             }, 
-          Jambughoda: {},
-          },
-          Ahmedabad: {}, Amreli: {}, Anand: {}, Aravalli: {}, Banaskantha: {}, Bharuch: {},
-          Bhavnagar: {}, Botad: {}, Chhotaudepur: {}, Dahod: {}, Dangs: {}, Devbhumi_Dwarka: {},
-          Gandhinagar: {}, Gir_Somnath: {}, Jamnagar: {}, Junagadh: {}, Kachchh: {}, Kheda: {},
-          Mahesana: {}, Mahisagar: {}, Morbi: {}, Narmada: {}, Navsari: {}, Patan: {},
-          Porbandar: {}, Rajkot: {}, Sabarkantha: {}, Surat: {}, Surendranagar: {},
-          Tapi: {}, Vadodara: {}, Valsad: {}
+    Gujarat: {
+      PanchMahals: {
+        Kalol: {
+          Bhavanadasi: ["Kamaladasi", "Kailashdasi", "Kishnadasi"],
+          Krishnadasi: ["Jyotidasi", "Rajnidasi", "Kasidasi"]
         },
-        Maharashtra: {}
-      }
-    };
+        Godhra: { Babudas: ["Jitendra Das", "Ashok Das"] }
+      },
+      Ahmedabad: {}
+    },
+    Maharashtra: {}
+  }
+};
 
 // ---------- Helper Functions ----------
 function createDropdowns(containerId, options, count) {
@@ -98,7 +39,6 @@ function createDropdowns(containerId, options, count) {
   container.innerHTML = "";
   for (let i = 0; i < count; i++) {
     const div = document.createElement("div");
-    div.className = "seva-group";
     const select = document.createElement("select");
     select.innerHTML = "<option value=''>-- Select --</option>";
     options.forEach(opt => select.add(new Option(opt, opt)));
@@ -152,8 +92,8 @@ function populateMembers() {
   data[c][s][d][th][team].forEach(m => document.getElementById("teammember").add(new Option(m, m)));
 }
 
-// ---------- Table Functions ----------
-function addToTable() {
+// ---------- Submit + Preview ----------
+function submitData() {
   const c = document.getElementById("country").value;
   const s = document.getElementById("state").value;
   const d = document.getElementById("district").value;
@@ -165,24 +105,24 @@ function addToTable() {
   const datetime = now.toLocaleDateString("en-GB") + " " + now.toLocaleTimeString();
 
   if (!c || !s || !d || !th || !team || !m) {
-    alert("Please fill all dropdowns!");
+    alert("⚠️ Please fill all dropdowns before submitting!");
     return;
   }
 
-  const regular = [...document.querySelectorAll("#regularSeva select")].map(sel => sel.value).filter(v => v).join(" | ");
-  const social = [...document.querySelectorAll("#socialSeva select")].map(sel => sel.value).filter(v => v).join(" | ");
+  const regular = [...document.querySelectorAll("#regularSeva select")]
+    .map(sel => sel.value)
+    .filter(v => v)
+    .join(" | ");
+  const social = [...document.querySelectorAll("#socialSeva select")]
+    .map(sel => sel.value)
+    .filter(v => v)
+    .join(" | ");
 
+  // ✅ Preview Table Update
   const row = document.getElementById("reportTable").querySelector("tbody").insertRow();
   [datetime, c, s, d, th, team, m, remark, regular, social].forEach(val => row.insertCell().textContent = val);
 
-  saveToGoogleSheet(datetime, c, s, d, th, team, m, remark, regular, social);
-
-  document.getElementById("reportForm").reset();
-  createDropdowns("regularSeva", ["👍Done", "❌Not Done"], 3);
-  createDropdowns("socialSeva", ["✅Done", "❌Not Done"], 3);
-}
-
-function saveToGoogleSheet(datetime, c, s, d, th, team, m, remark, regular, social) {
+  // ✅ Direct Save to Google Sheet
   fetch(scriptURL, {
     method: 'POST',
     body: JSON.stringify({
@@ -192,33 +132,14 @@ function saveToGoogleSheet(datetime, c, s, d, th, team, m, remark, regular, soci
     })
   })
   .then(res => res.text())
-  .then(msg => console.log("✅ Saved:", msg))
+  .then(msg => {
+    console.log("✅ Saved:", msg);
+    alert("✅ Data Submitted Successfully!");
+  })
   .catch(err => console.error("❌ Error:", err));
+
+  // Reset form
+  document.getElementById("reportForm").reset();
+  createDropdowns("regularSeva", ["👍Done", "❌Not Done"], 3);
+  createDropdowns("socialSeva", ["✅Done", "❌Not Done"], 3);
 }
-
-function exportCSV() {
-  const table = document.getElementById("reportTable");
-  const rows = [...table.rows].map(r => [...r.cells].map(c => c.textContent));
-  const csv = rows.map(r => r.join(",")).join("\n");
-  const blob = new Blob([csv], { type: "text/csv" });
-  const a = document.createElement("a");
-  a.href = URL.createObjectURL(blob);
-  a.download = "TeamSevaReport.csv";
-  a.click();
-}
-
-function saveTableToSheet() {
-  const rows = [...document.querySelectorAll("#reportTable tbody tr")];
-  rows.forEach(r => {
-    const vals = [...r.cells].map(c => c.textContent);
-    saveToGoogleSheet(...vals);
-  });
-  alert("✅ Table data sent to Google Sheet!");
-}
-
-
-
-
-
-
-
