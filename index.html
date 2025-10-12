@@ -46,59 +46,60 @@ footer{background:#222;color:#ccc;padding:15px;text-align:center;margin-top:30px
 
 <div class="card">
 <h2>Fill Report</h2>
-<form id="reportForm" onsubmit="submitDirect(event)">
+<form id="reportForm">
+
 <label>Select Date</label>
-<input type="date" id="reportDate" required>
+<input type="date" id="date">
 
 <label>Country</label>
-<select id="country" onchange="populateStates()" required><option value="">-- Select Country --</option></select>
+<select id="country" onchange="populateStates()"><option value="">-- Select Country --</option></select>
 
 <label>State</label>
-<select id="state" onchange="populateDistricts()" required><option value="">-- Select State --</option></select>
+<select id="state" onchange="populateDistricts()"><option value="">-- Select State --</option></select>
 
 <label>District</label>
-<select id="district" onchange="populateTahesils()" required><option value="">-- Select District --</option></select>
+<select id="district" onchange="populateTahesils()"><option value="">-- Select District --</option></select>
 
 <label>Tahesil</label>
-<select id="tahesil" onchange="populateTeams()" required><option value="">-- Select Tahesil --</option></select>
+<select id="tahesil" onchange="populateTeams()"><option value="">-- Select Tahesil --</option></select>
 
 <label>Team</label>
-<select id="team" onchange="populateMembers()" required><option value="">-- Select Team --</option></select>
+<select id="team" onchange="populateMembers()"><option value="">-- Select Team --</option></select>
 
 <label>Team Member</label>
-<select id="teammember" required><option value="">-- Select Team Member --</option></select>
+<select id="teammember"><option value="">-- Select Team Member --</option></select>
 
 <label>Remark</label>
 <input type="text" id="remark" placeholder="Enter remark">
 
 <h3>Aapki Team Me Kon Si Seva Huyee?</h3>
 <div class="seva-section">
-  <label>1. 👍 Regular Satsang Seva</label><div id="regularSeva"></div>
-  <label>2. ✅ Social Media Seva</label><div id="socialSeva"></div>
+<label>1. 👍 Regular Satsang Seva</label><div id="regularSeva"></div>
+<label>2. ✅ Social Media Seva</label><div id="socialSeva"></div>
 </div>
 
-<button type="submit" class="btn btn-submit">🚀 Submit Report</button>
+<button type="button" class="btn btn-add" onclick="submitDirect(event)">➕ Add to Table</button>
 <button type="reset" class="btn btn-reset">♻ Reset Form</button>
+<button type="button" class="btn btn-export" onclick="exportCSV()">⬇ Export CSV</button>
+
 </form>
 </div>
 
 <div class="card">
-<h2>Submitted Reports (Preview)</h2>
+<h2>Report Table</h2>
 <table id="reportTable">
-  <thead>
-    <tr>
-      <th>Timestamp</th><th>Date</th><th>Country</th><th>State</th><th>District</th><th>Tahesil</th>
-      <th>Team</th><th>Team Member</th><th>Remark</th><th>Regular Seva</th><th>Social Seva</th>
-    </tr>
-  </thead>
-  <tbody></tbody>
+<thead>
+<tr>
+<th>Date</th><th>Time</th><th>Country</th><th>State</th><th>District</th><th>Tahesil</th>
+<th>Team</th><th>Team Member</th><th>Remark</th><th>Regular Seva</th><th>Social Seva</th>
+</tr>
+</thead>
+<tbody></tbody>
 </table>
-</div>
 </div>
 
 <footer>© 2025 Team Seva Reporting System | Developed for community seva tracking 🌼</footer>
+
 <script src="script.js"></script>
 </body>
 </html>
-
-
