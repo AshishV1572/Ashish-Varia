@@ -152,6 +152,8 @@ function submitDirect(event) {
   event.preventDefault();
 
   const payload = {
+    timestamp,                                   // Current time (auto)
+    selectedDate ? Utilities.formatDate(selectedDate, Session.getScriptTimeZone(), "dd/MM/yyyy") : "", // Selected Date
     datetime: new Date().toLocaleString("en-GB"),
     country: country.value,
     state: state.value,
@@ -185,6 +187,7 @@ function submitDirect(event) {
     })
     .catch(err => console.error("❌ Error:", err));
 }
+
 
 
 
