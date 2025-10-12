@@ -1,4 +1,4 @@
-const scriptURL = "https://script.google.com/macros/s/AKfycbyYHGWG1V91eNZWpEI0Tn-fayCSbhZQsnA9RgqtD5hthrd4rclCS3bZvjc7Y625j-Ztfw/exec"; // <-- Google Apps Script Web App URL
+const scriptURL = "https://script.google.com/macros/s/AKfycbzpyTzxnbbM7ccUIWuOqzsUrSrrCYoKVTkXU6PXXQaXOkdKIsts8FrI1SClcZooQHflkQ/exec"; // <-- Google Apps Script Web App URL
 
 // ---------- On Load ----------
 window.onload = () => {
@@ -124,4 +124,5 @@ function submitDirect(event) {
     })
     .catch(err => console.error("❌ Error:", err));
 }
+
 
