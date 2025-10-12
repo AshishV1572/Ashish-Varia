@@ -8,17 +8,6 @@ window.onload = () => {
   updateDateTime();
   setInterval(updateDateTime, 1000);
 };
-
-// ---------- Date & Time ----------
-function updateDateTime() {
-  const now = new Date();
-  document.getElementById("datetime").textContent =
-    now.toLocaleDateString("en-GB") + " | " + now.toLocaleTimeString();
-  const selectedDate = document.getElementById("date").value || new Date().toLocaleDateString("en-GB");
-  const currentTime = new Date().toLocaleTimeString();
-  saveToGoogleSheet(date,time,country:c,state:s,district:d,tahesil:th,team,teammember:m,remark,regular,social);
-}
-
 // ---------- Dropdown Data ----------
 const data = {
   India: {
@@ -96,6 +85,16 @@ const data = {
         Maharashtra: {}
       }
     };
+// ---------- Date & Time ----------
+function updateDateTime() {
+  const now = new Date();
+  document.getElementById("datetime").textContent =
+    now.toLocaleDateString("en-GB") + " | " + now.toLocaleTimeString();
+  const selectedDate = document.getElementById("date").value || new Date().toLocaleDateString("en-GB");
+  const currentTime = new Date().toLocaleTimeString();
+  saveToGoogleSheet(date,time,country:c,state:s,district:d,tahesil:th,team,teammember:m,remark,regular,social);
+}
+
 // ---------- Helper Functions ----------
 function createDropdowns(containerId, options, count) {
   const container = document.getElementById(containerId);
@@ -187,6 +186,7 @@ function submitDirect(event) {
     })
     .catch(err => console.error("❌ Error:", err));
 }
+
 
 
 
