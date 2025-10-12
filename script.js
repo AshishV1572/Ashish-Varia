@@ -1,4 +1,4 @@
-const scriptURL = "https://script.google.com/macros/s/AKfycbwf8QctE2PDfF_1bA2QEY-wDz2_PuhXpB2Aaho9eKI-NPlcnc0j-9L14aggO-Wr8k8XnA/exec";
+const scriptURL = "https://script.google.com/macros/s/AKfycbww-b49P1LSqWEgl4tJMc3r0v2yo0pe_ZzHhMctV2mHxAnfgkLlXbsLd3JrBm8QaRHZcA/exec";
 // ---------- On Load ----------
 const data = {
   India: {
@@ -185,6 +185,7 @@ function showReview(date,time,c,s,d,th,team,m,remark,regular,social){
   const row=tbody.insertRow();
   [date,time,c,s,d,th,team,m,remark,regular,social].forEach(v=>row.insertCell().textContent=v);
 }
+
 
 
 
