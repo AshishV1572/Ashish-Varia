@@ -4,105 +4,62 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Team Seva Report</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Segoe+UI&display=swap">
-<style>
-body { font-family:"Segoe UI",sans-serif; background: linear-gradient(120deg,#fce4ec,#e0f7fa); margin:0; padding:0; color:#333; }
-header { background: linear-gradient(to right,#2196f3,#e91e63); color:#fff; padding:20px; text-align:center; font-size:20px; font-weight:bold; position:relative; }
-.datetime { position:absolute; top:12px; left:15px; font-size:15px; font-weight:bold; color:#fff; background: linear-gradient(135deg,#ff9800,#f44336); padding:6px 14px; border-radius:20px; box-shadow:0 3px 8px rgba(0,0,0,0.3); animation:glow 2s infinite alternate; }
-@keyframes glow { from { box-shadow:0 0 5px #ff9800,0 0 10px #f44336; } to { box-shadow:0 0 15px #ff5722,0 0 25px #e91e63; } }
-.container { max-width:1100px; margin:20px auto; padding:15px; }
-.card { background:#fff; border-radius:12px; padding:20px; margin-bottom:20px; box-shadow:0 4px 15px rgba(0,0,0,0.1); }
-h2,h3 { margin-top:0; background: linear-gradient(to right,#2196f3,#e91e63); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
-label { display:block; margin-top:12px; font-weight:600; }
-select,input[type="text"],input[type="date"] { width:100%; padding:8px; margin:4px 0; border:1px solid #ccc; border-radius:6px; font-size:14px; }  
-select,input[type="text"] { width:100%; padding:8px; margin:4px 0; border:1px solid #ccc; border-radius:6px; font-size:14px; }
-.btn { display:inline-block; margin-top:15px; padding:10px 18px; border:none; border-radius:8px; font-size:14px; cursor:pointer; transition:0.3s; }
-.btn-add{background:#4caf50;color:#fff;} .btn-reset{background:#f44336;color:#fff;} .btn-export{background:#2196f3;color:#fff;} .btn-save{background:#ff9800;color:#fff;} .btn:hover{opacity:0.9;}
-table{width:100%;border-collapse:collapse;margin-top:25px;}
-th,td{padding:8px;border:1px solid #ccc;text-align:left;font-size:13px;}
-th{background:#2196f3;color:#fff;}
-tr:nth-child(even){background:#fafafa;}
-.seva-section{margin-top:15px;padding:10px;border:1px dashed #bbb;border-radius:8px;background:#fafafa;}
-.seva-group{display:flex;gap:10px;margin:5px 0;}
-.seva-group select{flex:1;}
-footer{background:#222;color:#ccc;padding:15px;text-align:center;margin-top:30px;font-size:13px;}
-</style>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
-
 <header>
 🌸 Team Seva Report System 🌸
 <div class="datetime" id="datetime"></div>
 </header>
 
 <div class="container">
+  <div class="card">
+    <h2>Fill Report</h2>
+    <form id="reportForm">
+      <label>Select Date</label>
+      <input type="date" id="reportDate">
 
-<!-- About Section -->
-<section id="about">
-  <h2>About Seva</h2>
-  <p>🌸 Satlok Ashram ek Adhyatmik Kendra Hai Jo 
-  <b>Jagatguru Tatvdarshi Sant Rampal Ji Maharaj</b> Ke Margdarshan Par Chal Raha Hai.</p>
-  <p>✨ Yahan Par Bhakton Ko Jeevan Ka Asli Arth Aur Moksha Ka Gyaan Diya Jata Hai.</p>
-  <p>👉 Official Website: 
-    <a href="https://www.jagatgururampalji.org/" target="_blank">www.jagatgururampalji.org</a>
-  </p>
-  <h3>📞 Contact : 7990505069</h3>
-</section>
+      <label>Country</label>
+      <select id="country" onchange="populateStates()"><option value="">-- Select Country --</option></select>
+      <label>State</label>
+      <select id="state" onchange="populateDistricts()"><option value="">-- Select State --</option></select>
+      <label>District</label>
+      <select id="district" onchange="populateTahesils()"><option value="">-- Select District --</option></select>
+      <label>Tahesil</label>
+      <select id="tahesil" onchange="populateTeams()"><option value="">-- Select Tahesil --</option></select>
+      <label>Team</label>
+      <select id="team" onchange="populateMembers()"><option value="">-- Select Team --</option></select>
+      <label>Team Member</label>
+      <select id="teammember"><option value="">-- Select Team Member --</option></select>
+      <label>Remark</label>
+      <input type="text" id="remark" placeholder="Enter remark">
 
-<!-- Form -->
-<div class="card">
-<h2>Fill Report</h2>
+      <h3>Aapki Team Me Kon Si Seva Huyee?</h3>
+      <div class="seva-section">
+        <label>1. 👍 Regular Satsang Seva</label><div id="regularSeva"></div>
+        <label>2. ✅ Social Media Seva</label><div id="socialSeva"></div>
+      </div>
 
-<form id="reportForm" onsubmit="submitDirect(event)">
-<label>Select Date</label>
-<input type="date" id="reportDate">
+      <button type="submit" class="btn btn-submit">📤 Submit Report</button>
+      <button type="reset" class="btn btn-reset">♻ Reset Form</button>
+    </form>
 
-  <label>Country</label>
-  <select id="country" onchange="populateStates()"><option value="">-- Select Country --</option></select>
-
-  <label>State</label>
-  <select id="state" onchange="populateDistricts()"><option value="">-- Select State --</option></select>
-
-  <label>District</label>
-  <select id="district" onchange="populateTahesils()"><option value="">-- Select District --</option></select>
-
-  <label>Tahesil</label>
-  <select id="tahesil" onchange="populateTeams()"><option value="">-- Select Tahesil --</option></select>
-
-  <label>Team</label>
-  <select id="team" onchange="populateMembers()"><option value="">-- Select Team --</option></select>
-
-  <label>Team Member</label>
-  <select id="teammember"><option value="">-- Select Team Member --</option></select>
-
-  <label>Remark</label>
-  <input type="text" id="remark" placeholder="Enter remark">
-
-  <h3>Aapki Team Me Kon Si Seva Huyee?</h3>
-  <div class="seva-section">
-    <label>1. 👍 Regular Satsang Seva</label><div id="regularSeva"></div>
-    <label>2. ✅ Social Media Seva</label><div id="socialSeva"></div>
+    <div id="message"></div>
   </div>
 
-  <button type="button" class="btn btn-add" onclick="addToTable()">➕ Add to Table</button>
-  <button type="reset" class="btn btn-reset">♻ Reset Form</button>
-  <button type="button" class="btn btn-export" onclick="exportCSV()">⬇ Export CSV</button>
-</form>
-</div>
-
-<!-- Report Table -->
-<div class="card">
-<h2>Report Table</h2>
-<button type="button" class="btn btn-save" onclick="saveTableToSheet()">💾 Save Table to Google Sheet</button>
-<table id="reportTable">
-  <thead>
-    <tr>
-      <th>Date & Time</th><th>Country</th><th>State</th><th>District</th><th>Tahesil</th>
-      <th>Team</th><th>Team Member</th><th>Remark</th><th>Regular Seva</th><th>Social Seva</th>
-    </tr>
-  </thead>
-  <tbody></tbody>
-</table>
+  <!-- Review Table -->
+  <div class="card">
+    <h2>Latest Submission Review</h2>
+    <table id="reviewTable">
+      <thead>
+        <tr>
+          <th>Date</th><th>Time</th><th>Country</th><th>State</th><th>District</th><th>Tahesil</th>
+          <th>Team</th><th>Team Member</th><th>Remark</th><th>Regular Seva</th><th>Social Seva</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
 </div>
 
 <footer>© 2025 Team Seva Reporting System | Developed for community seva tracking 🌼</footer>
@@ -110,6 +67,3 @@ footer{background:#222;color:#ccc;padding:15px;text-align:center;margin-top:30px
 <script src="script.js"></script>
 </body>
 </html>
-
-
-
