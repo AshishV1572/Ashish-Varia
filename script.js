@@ -1,4 +1,4 @@
-const scriptURL = "https://script.google.com/macros/s/AKfycby9zKNBHcTODayOKPaa6apGYgvnuCH5IGNYALvk6b9xblenDQ-SQKJDDyOHEDRA_6KgoQ/exec";
+const scriptURL = "https://script.google.com/macros/s/AKfycbxiaNloBUqMPYdERbSW_1xnwR-6ejVHcf9hzxd7sFmX4LmQ3NoUBZ8Y9AYmI7RDvR70Ew/exec";
 // ---------- On Load ----------
 window.onload = () => {
   Object.keys(data).forEach(c => document.getElementById("country").add(new Option(c, c)));
@@ -215,3 +215,4 @@ function saveTableToSheet() {
   });
   alert("✅ Table data sent to Google Sheet!");
 }
+
