@@ -1,8 +1,23 @@
-const scriptURL = "https://script.google.com/macros/s/AKfycbx-HNN8OewvFipp-MLlHgVpfU05F8JUnBqlD4Lv_oMuY4EMeiJmzYUM7juqTPNbnZrxdg/exec"; // <-- Google Apps Script Web App URL
+const scriptURL = "https://script.google.com/macros/s/AKfycby9zKNBHcTODayOKPaa6apGYgvnuCH5IGNYALvk6b9xblenDQ-SQKJDDyOHEDRA_6KgoQ/exec";
+// ---------- On Load ----------
+window.onload = () => {
+  Object.keys(data).forEach(c => document.getElementById("country").add(new Option(c, c)));
+  createDropdowns("regularSeva", ["👍Done", "❌Not Done"], 3);
+  createDropdowns("socialSeva", ["✅Done", "❌Not Done"], 3);
+  updateDateTime();
+  setInterval(updateDateTime, 1000);
+};
+
+// ---------- Date & Time ----------
+function updateDateTime() {
+  const now = new Date();
+  document.getElementById("datetime").textContent = now.toLocaleDateString("en-GB") + " | " + now.toLocaleTimeString();
+}
+
 // ---------- Dropdown Data ----------
 const data = {
   India: {
-    Gujarat: {
+        Gujarat: {
           PanchMahals: {
             Kalol: {
               Bhavanadasi: [
@@ -76,97 +91,127 @@ const data = {
         Maharashtra: {}
       }
     };
-// ---------- On load ----------
-window.onload = () => {
-  Object.keys(data).forEach(c => document.getElementById("country").add(new Option(c,c)));
-  createDropdowns("regularSeva", ["👍Done","❌Not Done"], 3);
-  createDropdowns("socialSeva", ["✅Done","❌Not Done"], 3);
-  updateDateTime();
-  setInterval(updateDateTime, 1000);
-};
 
-// ---------- Update Clock ----------
-function updateDateTime() {
-  const now = new Date();
-  document.getElementById("datetime").textContent = now.toLocaleDateString("en-GB") + " | " + now.toLocaleTimeString();
-}
-
-// ---------- Dropdown Helpers ----------
-function createDropdowns(containerId, options, count){
+// ---------- Helper Functions ----------
+function createDropdowns(containerId, options, count) {
   const container = document.getElementById(containerId);
-  container.innerHTML="";
-  for(let i=0;i<count;i++){
+  container.innerHTML = "";
+  for (let i = 0; i < count; i++) {
+    const div = document.createElement("div");
+    div.className = "seva-group";
     const select = document.createElement("select");
-    select.innerHTML="<option value=''>-- Select --</option>";
-    options.forEach(opt=>select.add(new Option(opt,opt)));
-    container.appendChild(select);
+    select.innerHTML = "<option value=''>-- Select --</option>";
+    options.forEach(opt => select.add(new Option(opt, opt)));
+    div.appendChild(select);
+    container.appendChild(div);
   }
 }
 
-function resetSelect(id, placeholder){ document.getElementById(id).innerHTML=`<option value="">-- Select ${placeholder} --</option>`; }
+function resetSelects(ids) {
+  ids.forEach(id => (document.getElementById(id).innerHTML = `<option value="">-- Select ${id} --</option>`));
+}
 
-function populateStates(){ resetSelect("state","State"); Object.keys(data[country.value]||{}).forEach(s=>state.add(new Option(s,s))); }
-function populateDistricts(){ resetSelect("district","District"); Object.keys(data[country.value][state.value]||{}).forEach(d=>district.add(new Option(d,d))); }
-function populateTahesils(){ resetSelect("tahesil","Tahesil"); Object.keys(data[country.value][state.value][district.value]||{}).forEach(t=>tahesil.add(new Option(t,t))); }
-function populateTeams(){ resetSelect("team","Team"); Object.keys(data[country.value][state.value][district.value][tahesil.value]||{}).forEach(t=>team.add(new Option(t,t))); }
-function populateMembers(){ resetSelect("teammember","Team Member"); (data[country.value][state.value][district.value][tahesil.value][team.value]||[]).forEach(m=>teammember.add(new Option(m,m))); }
+function populateStates() {
+  const c = document.getElementById("country").value;
+  resetSelects(["state", "district", "tahesil", "team", "teammember"]);
+  if (!c) return;
+  Object.keys(data[c]).forEach(s => document.getElementById("state").add(new Option(s, s)));
+}
+function populateDistricts() {
+  const c = document.getElementById("country").value;
+  const s = document.getElementById("state").value;
+  resetSelects(["district", "tahesil", "team", "teammember"]);
+  if (!s) return;
+  Object.keys(data[c][s]).forEach(d => document.getElementById("district").add(new Option(d, d)));
+}
+function populateTahesils() {
+  const c = document.getElementById("country").value;
+  const s = document.getElementById("state").value;
+  const d = document.getElementById("district").value;
+  resetSelects(["tahesil", "team", "teammember"]);
+  if (!d) return;
+  Object.keys(data[c][s][d]).forEach(th => document.getElementById("tahesil").add(new Option(th, th)));
+}
+function populateTeams() {
+  const c = document.getElementById("country").value;
+  const s = document.getElementById("state").value;
+  const d = document.getElementById("district").value;
+  const th = document.getElementById("tahesil").value;
+  resetSelects(["team", "teammember"]);
+  if (!th) return;
+  Object.keys(data[c][s][d][th]).forEach(team => document.getElementById("team").add(new Option(team, team)));
+}
+function populateMembers() {
+  const c = document.getElementById("country").value;
+  const s = document.getElementById("state").value;
+  const d = document.getElementById("district").value;
+  const th = document.getElementById("tahesil").value;
+  const team = document.getElementById("team").value;
+  resetSelects(["teammember"]);
+  if (!team) return;
+  data[c][s][d][th][team].forEach(m => document.getElementById("teammember").add(new Option(m, m)));
+}
 
-// ---------- Submit & Save ----------
-function submitReport(){
-  const selectedDate = document.getElementById("date").value;
-  const timestamp = new Date().toLocaleTimeString();
-  
-  const payload = {
-    date: selectedDate,
-    timestamp: timestamp,
-    country: country.value,
-    state: state.value,
-    district: district.value,
-    tahesil: tahesil.value,
-    team: team.value,
-    teammember: teammember.value,
-    remark: remark.value,
-    regular: [...document.querySelectorAll("#regularSeva select")].map(s=>s.value).join(" | "),
-    social: [...document.querySelectorAll("#socialSeva select")].map(s=>s.value).join(" | ")
-  };
+// ---------- Table Functions ----------
+function addToTable() {
+  const c = document.getElementById("country").value;
+  const s = document.getElementById("state").value;
+  const d = document.getElementById("district").value;
+  const th = document.getElementById("tahesil").value;
+  const team = document.getElementById("team").value;
+  const m = document.getElementById("teammember").value;
+  const remark = document.getElementById("remark").value;
+  const now = new Date();
+  const datetime = now.toLocaleDateString("en-GB") + " " + now.toLocaleTimeString();
 
-  if(Object.values(payload).some(v=>"".includes(v))){
-    alert("⚠️ Please fill all fields!");
+  if (!c || !s || !d || !th || !team || !m) {
+    alert("Please fill all dropdowns!");
     return;
   }
 
-  // Add to Preview Table
-  const row=document.querySelector("#reportTable tbody").insertRow();
-  Object.values(payload).forEach(v=>row.insertCell().textContent=v);
+  const regular = [...document.querySelectorAll("#regularSeva select")].map(sel => sel.value).filter(v => v).join(" | ");
+  const social = [...document.querySelectorAll("#socialSeva select")].map(sel => sel.value).filter(v => v).join(" | ");
 
-  // Save to Google Sheet
-  fetch(scriptURL,{
-    method:"POST",
-    headers: { "Content-Type":"application/json" },
-    body: JSON.stringify(payload)
-  }).then(res=>res.text()).then(msg=>{
-    console.log("✅ Saved:", msg);
-    reportForm.reset();
-    createDropdowns("regularSeva", ["👍Done","❌Not Done"], 3);
-    createDropdowns("socialSeva", ["✅Done","❌Not Done"], 3);
-  }).catch(err=>console.error("❌ Error:",err));
+  const row = document.getElementById("reportTable").querySelector("tbody").insertRow();
+  [datetime, c, s, d, th, team, m, remark, regular, social].forEach(val => row.insertCell().textContent = val);
+
+  saveToGoogleSheet(datetime, c, s, d, th, team, m, remark, regular, social);
+
+  document.getElementById("reportForm").reset();
+  createDropdowns("regularSeva", ["👍Done", "❌Not Done"], 3);
+  createDropdowns("socialSeva", ["✅Done", "❌Not Done"], 3);
 }
 
-// ---------- Export CSV ----------
-function exportCSV(){
-  const rows=[...document.querySelectorAll("#reportTable tr")].map(r=>[...r.cells].map(c=>c.textContent));
-  const csv=rows.map(r=>r.join(",")).join("\n");
-  const blob=new Blob([csv],{type:"text/csv"});
-  const a=document.createElement("a");
-  a.href=URL.createObjectURL(blob);
-  a.download="TeamSevaReport.csv";
+function saveToGoogleSheet(datetime, c, s, d, th, team, m, remark, regular, social) {
+  fetch(scriptURL, {
+    method: 'POST',
+    body: JSON.stringify({
+      datetime, country: c, state: s, district: d,
+      tahesil: th, team, teammember: m,
+      remark, regular, social
+    })
+  })
+  .then(res => res.text())
+  .then(msg => console.log("✅ Saved:", msg))
+  .catch(err => console.error("❌ Error:", err));
+}
+
+function exportCSV() {
+  const table = document.getElementById("reportTable");
+  const rows = [...table.rows].map(r => [...r.cells].map(c => c.textContent));
+  const csv = rows.map(r => r.join(",")).join("\n");
+  const blob = new Blob([csv], { type: "text/csv" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "TeamSevaReport.csv";
   a.click();
 }
 
-
-
-
-
-
-
-
+function saveTableToSheet() {
+  const rows = [...document.querySelectorAll("#reportTable tbody tr")];
+  rows.forEach(r => {
+    const vals = [...r.cells].map(c => c.textContent);
+    saveToGoogleSheet(...vals);
+  });
+  alert("✅ Table data sent to Google Sheet!");
+}
